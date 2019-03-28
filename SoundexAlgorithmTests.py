@@ -1,5 +1,7 @@
 import SoundexAlgorithm
 import unittest
+from unittest.mock import Mock
+from SoundexAlgorithm import ISaveData, DataContaioner
 
 class SoundxAlgorithmTests(unittest.TestCase):
     def test_WhenTheWordIsEmptyReturn0000(self):
@@ -101,7 +103,20 @@ class SoundxAlgorithmTests(unittest.TestCase):
         soundex = SoundexAlgorithm.SoundexAlgorithm()
         encodeword = soundex.Encode("Ashcraft")
         self.assertEqual(encodeword, "a261")
+
     def test_WhentTheWordIsHoneymanThenReturnH555(self):
         soundex = SoundexAlgorithm.SoundexAlgorithm()
         encodeword = soundex.Encode("Honeyman")
         self.assertEqual(encodeword, "h555")
+
+    def test_MockTest(self):
+        mock = Mock(spec=ISaveData)
+        datacontainer = DataContaioner(mock)
+        datacontainer.Save("abcd")
+        mock.SaveWord.assert_called_once_with("abcd")
+
+    def test_MockTestvol2(self):
+        mock = Mock(spec=ISaveData)
+        mock.SaveWord("abcd").return_value = True
+        datacontainer = DataContaioner(mock)
+        assert datacontainer.Save("abcd") == True
